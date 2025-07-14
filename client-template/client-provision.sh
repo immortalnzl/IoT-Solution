@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEMPLATE_DIR="./monitoring-template"
+TEMPLATE_DIR="./client-template"
 DEST_DIR="./clients"
 
 read -p "Enter client name (e.g. client-abc): " CLIENT_NAME
