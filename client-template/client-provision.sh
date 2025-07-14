@@ -28,6 +28,24 @@ INFLUX_TOKEN=${INFLUX_TOKEN}
 GRAFANA_PASSWORD=admin123
 EOF
 
+# Create a datasource link
+cat > "$CLIENT_DIR/grafana/provisioning/datasources/influxdb.yml" << EOF
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    jsonData:
+      version: Flux
+      organization: ${CLIENT_SLUG}-org
+      defaultBucket: telegraf
+    secureJsonData:
+      token: ${INFLUX_TOKEN}
+    isDefault: true
+EOF
+
 echo "✅ Created .env with token: ${INFLUX_TOKEN}"
 
 echo "Data Source has been created" 
