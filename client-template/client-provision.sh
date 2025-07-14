@@ -31,7 +31,6 @@ EOF
 # Create a datasource link
 cat > "$CLIENT_DIR/grafana/provisioning/datasources/influxdb.yml" << EOF
 apiVersion: 1
-
 datasources:
   - name: InfluxDB
     type: influxdb
