@@ -1,0 +1,4 @@
+secureJsonData:
+  token: ${INFLUX_TOKEN}
+jsonData:
+  organization: ${CLIENT_ORG}
