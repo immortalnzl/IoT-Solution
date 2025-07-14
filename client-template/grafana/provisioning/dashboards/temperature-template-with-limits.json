@@ -1,0 +1,54 @@
+{
+  "type": "timeseries",
+  "title": "Temperature Over Time",
+  "fieldConfig": {
+    "defaults": {
+      "unit": "celsius",
+      "color": {
+        "mode": "thresholds"
+      },
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "color": "yellow",
+            "value": null
+          },
+          {
+            "color": "green",
+            "value": 2
+          },
+          {
+            "color": "yellow",
+            "value": 8
+          }
+        ]
+      }
+    }
+  },
+  "targets": [
+    {
+      "refId": "A",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "-- will auto-resolve --"
+      },
+      "query": "from(bucket: \"telegraf\")\n  |> range(start: -24h)\n  |> filter(fn: (r) => r._measurement == \"temperature\" and r._field == \"value\")\n  |> aggregateWindow(every: 5m, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")"
+    }
+  ],
+  "options": {
+    "legend": {
+      "displayMode": "list",
+      "placement": "bottom"
+    },
+    "tooltip": {
+      "mode": "single"
+    }
+  },
+  "gridPos": {
+    "x": 0,
+    "y": 0,
+    "w": 24,
+    "h": 10
+  }
+}
