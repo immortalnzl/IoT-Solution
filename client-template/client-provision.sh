@@ -30,6 +30,24 @@ EOF
 
 echo "✅ Created .env with token: ${INFLUX_TOKEN}"
 
+# Create the datasource link
+cat > "$CLIENT_DIR/grafana/provisioning/datasources" <<EOF
+apiVersion: 1
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    jsonData:
+      version: Flux
+      organization: ${CLIENT_ORG}
+      defaultBucket: telegraf
+    secureJsonData:
+      token: ${INFLUX_TOKEN}
+    isDefault: true
+EOF
+
+echo "Data Source has been created" 
 # Optionally launch stack
 read -p "🚀 Launch Docker stack now? (y/n): " LAUNCH
 if [[ "$LAUNCH" == "y" ]]; then
