@@ -26,12 +26,12 @@ services:
 
   grafana:
     image: grafana/grafana:10.4.2
-    container_name: grafana-client-a
+    container_name: grafana-${CLIENT}
     ports:
       - "3000:3000"
     volumes:
-      - grafana-data:/var/lib/grafana
-      - grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin123
