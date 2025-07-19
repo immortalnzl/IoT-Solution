@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEMPLATE_DIR="./client-template"
+TEMPLATE_DIR="./monitoring-template"
 DEST_DIR="./clients"
 
 read -p "Enter client name (e.g. client-abc): " CLIENT_NAME
@@ -16,10 +16,10 @@ echo "📁 Creating client stack in $CLIENT_DIR ..."
 mkdir -p "$CLIENT_DIR"
 cp -r "$TEMPLATE_DIR/." "$CLIENT_DIR/"
 
-# Generate secure token (can replace with openssl or uuidgen if needed)
+# Generate secure token
 INFLUX_TOKEN=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c32)
 
-# Create .env file
+# Create .env
 cat > "$CLIENT_DIR/.env" <<EOF
 CLIENT_NAME=${CLIENT_SLUG}
 CLIENT_ORG=${CLIENT_SLUG}-org
@@ -29,24 +29,48 @@ GRAFANA_PASSWORD=admin123
 EOF
 
 echo "✅ Created .env with token: ${INFLUX_TOKEN}"
-# Create a datasource link
-cat > "$CLIENT_DIR/grafana/provisioning/datasources/influxdb.yml" << EOF
-apiVersion: 1
-datasources:
-  - name: InfluxDB
-    type: influxdb
-    access: proxy
-    url: http://influxdb:8086
-    jsonData:
-      version: Flux
-      organization: ${CLIENT_SLUG}-org
-      defaultBucket: telegraf
-    secureJsonData:
-      token: ${INFLUX_TOKEN}
-    isDefault: true
+
+# Inject values into grafana datasource
+DATASOURCE_FILE="$CLIENT_DIR/grafana/provisioning/datasources/datasource.yaml"
+if [ -f "$DATASOURCE_FILE" ]; then
+  sed -i "s|__CLIENT_ORG__|${CLIENT_SLUG}-org|g" "$DATASOURCE_FILE"
+  sed -i "s|__INFLUX_TOKEN__|${INFLUX_TOKEN}|g" "$DATASOURCE_FILE"
+  sed -i "s|__CLIENT_NAME__|${CLIENT_SLUG}|g" "$DATASOURCE_FILE"
+else
+  echo "⚠️ Warning: $DATASOURCE_FILE not found. Skipping datasource update."
+fi
+
+# Add Mosquitto config
+MOSQ_DIR="$CLIENT_DIR/mosquitto/config"
+mkdir -p "$MOSQ_DIR"
+cat > "$MOSQ_DIR/mosquitto.conf" <<EOF
+listener 1883
+allow_anonymous true
+persistence true
+persistence_location /mosquitto/data/
+log_dest file /mosquitto/log/mosquitto.log
 EOF
 
-# Optionally launch stack
+# Append Mosquitto service to docker-compose
+DOCKER_COMPOSE="$CLIENT_DIR/docker-compose.yml"
+cat >> "$DOCKER_COMPOSE" <<'EOF'
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: mosquitto-${CLIENT_NAME}
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    restart: unless-stopped
+EOF
+
+echo "✅ Mosquitto MQTT config added."
+
+# Launch stack
 read -p "🚀 Launch Docker stack now? (y/n): " LAUNCH
 if [[ "$LAUNCH" == "y" ]]; then
   cd "$CLIENT_DIR" || exit
