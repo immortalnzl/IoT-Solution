@@ -30,6 +30,20 @@ EOF
 
 echo "✅ Created .env with token: ${INFLUX_TOKEN}"
 
+TELEGRAF_TEMPLATE="$TEMPLATE_DIR/telegraf/telegraf.conf.template"
+TELEGRAF_DEST="$CLIENT_DIR/telegraf/telegraf.conf"
+
+mkdir -p "$(dirname "$TELEGRAF_DEST")"
+
+# Export values for envsubst
+export ENV_CLIENT_SLUG="${CLIENT_SLUG}"
+export ENV_INFLUX_TOKEN="${INFLUX_TOKEN}"
+
+# Substitute vars in telegraf.conf.template and write to destination
+envsubst < "$TELEGRAF_TEMPLATE" > "$TELEGRAF_DEST"
+
+echo "✅ Telegraf config generated at $TELEGRAF_DEST"
+
 cat > "$CLIENT_DIR/grafana/provisioning/datasources/influxdb.yml" << EOF
 apiVersion: 1
 datasources:
