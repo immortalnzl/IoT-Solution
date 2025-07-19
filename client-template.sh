@@ -51,23 +51,6 @@ persistence_location /mosquitto/data/
 log_dest file /mosquitto/log/mosquitto.log
 EOF
 
-# Append Mosquitto service to docker-compose
-DOCKER_COMPOSE="$CLIENT_DIR/docker-compose.yml"
-cat >> "$DOCKER_COMPOSE" <<'EOF'
-
-  mosquitto:
-    image: eclipse-mosquitto:2.0
-    container_name: mosquitto-${CLIENT_NAME}
-    ports:
-      - "1883:1883"
-      - "9001:9001"
-    volumes:
-      - ./mosquitto/config:/mosquitto/config
-      - ./mosquitto/data:/mosquitto/data
-      - ./mosquitto/log:/mosquitto/log
-    restart: unless-stopped
-EOF
-
 echo "✅ Mosquitto MQTT config added."
 
 # Launch stack
