@@ -30,7 +30,7 @@ EOF
 
 echo "✅ Created .env with token: ${INFLUX_TOKEN}"
 
-TELEGRAF_TEMPLATE="$TEMPLATE_DIR/telegraf/telegraf.conf.template"
+TELEGRAF_TEMPLATE="$TEMPLATE_DIR/telegraf.conf.template"
 TELEGRAF_DEST="$CLIENT_DIR/telegraf/telegraf.conf"
 
 mkdir -p "$(dirname "$TELEGRAF_DEST")"
