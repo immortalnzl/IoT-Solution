@@ -36,7 +36,7 @@ datasources:
   - name: InfluxDB
     type: influxdb
     access: proxy
-    url: http://influxdb:8086
+    url: http://influxdb${CLIENT_SLUG}:8086
     jsonData:
       version: Flux
       organization: ${CLIENT_SLUG}-org
