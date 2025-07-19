@@ -21,7 +21,7 @@ services:
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
     environment:
-      - ENV_CLIENT_SLUG=${CLIENT_SLUG}
+      - ENV_CLIENT_SLUG=${CLIENT_NAME}
       - ENV_INFLUX_TOKEN=${INFLUX_TOKEN}
     depends_on:
       - influxdb
