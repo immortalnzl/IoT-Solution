@@ -1,8 +1,9 @@
-[[inputs.mqtt_consumer]]
+## This is the mqtt plugin##
+[inputs.mqtt_consumer]]
   servers = ["tcp://mosquitto-${ENV_CLIENT_SLUG}:1883"]
   topics = [
     "application/1/device/+/event/up",
-    "lorawan/temperature"
+    "lorawan/temperature" ##this is the topic/message, will need to be changed to match the device, will investigate the use of wildcards##
   ]
   client_id = "telegraf-${ENV_CLIENT_SLUG}"
   data_format = "json"
