@@ -10,6 +10,9 @@
   persistent_session = false
   json_query = "object"
   tag_keys = ["deviceName"]
+  [agent]
+  interval = "25s"
+  collection_jitter = true
 
 [[outputs.influxdb_v2]]
   urls = ["http://influxdb-${ENV_CLIENT_SLUG}:8086"]
