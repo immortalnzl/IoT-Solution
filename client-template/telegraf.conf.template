@@ -10,8 +10,19 @@
   persistent_session = false
   tag_keys = ["deviceName"]
   [agent]
-  interval = "25s"
-  collection_jitter = true
+[agent]
+  interval = "10s"
+  round_interval = true
+  metric_batch_size = 1000
+  metric_buffer_limit = 10000
+  collection_jitter = "0s"
+  flush_interval = "10s"
+  flush_jitter = "10s"
+  precision = ""
+  debug = false
+  quiet = false
+  logfile = ""
+
 
 [[outputs.influxdb_v2]]
   urls = ["http://influxdb-${ENV_CLIENT_SLUG}:8086"]
