@@ -27,5 +27,5 @@
 [[outputs.influxdb_v2]]
   urls = ["http://influxdb-${ENV_CLIENT_SLUG}:8086"]
   token = "${ENV_INFLUX_TOKEN}"
-  organization = "${ENV_CLIENT_SLUG}"
+  organization = "${ENV_CLIENT_SLUG}-org"
   bucket = "telegraf"
