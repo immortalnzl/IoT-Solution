@@ -8,7 +8,6 @@
   data_format = "json"
   qos = 0
   persistent_session = false
-  json_query = "object"
   tag_keys = ["deviceName"]
   [agent]
   interval = "25s"
