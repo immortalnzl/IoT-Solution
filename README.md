@@ -19,4 +19,9 @@ This is a work in progress.
 3. ./client-template.sh
 
    This will ask for the clients name then auto generate a token, then run the docker compose.
+
+
+TO-DO
+Authenitcation
+
    
