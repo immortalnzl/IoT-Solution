@@ -21,8 +21,8 @@ This is a work in progress.
 This will ask for the clients name then auto generate a token, then run the docker compose.
 
 TO-DO
-Authentication (0Auth) whichever has best apis for genratration of login 2fa
-Tailscale? this is more for the gateway not really for the software stack.
-Front end/Login
+Authentication (0Auth) whichever has best apis for genratration of login 2fa <br>
+Tailscale? this is more for the gateway not really for the software stack. <br>
+Front end/Login <br>
 reporting
 
